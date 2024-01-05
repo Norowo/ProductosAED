@@ -1,0 +1,36 @@
+
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configuración de la conexión a la base de datos -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost/productosaed?createDatabaseIfNotExist=true</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"></property>
+
+        <!-- Configuración del dialecto de SQL que Hibernate debe usar -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <!-- Especifica las opciones de configuración de la caché de segundo nivel -->
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Mostrar las sentencias SQL en la consola -->
+        <property name="show_sql">true</property>
+
+        <!-- Formatear el SQL mostrado -->
+        <property name="format_sql">true</property>
+
+        <!-- Actualizar automáticamente el esquema de la base de datos -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- Para ver lo que está creando Hibernate -->
+        <property name="use_sql_comments">true</property>
+
+        <!-- Configuración de las entidades -->
+        <mapping class="aed.Producto"/>
+        <mapping class="aed.ProductoObservacion"/>
+        <mapping class="aed.Tienda"/>
+        <mapping class="aed.Stock"/>
+        <mapping class="aed.Familia"/>
+    </session-factory>
+</hibernate-configuration>
