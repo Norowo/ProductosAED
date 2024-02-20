@@ -13,10 +13,10 @@ import jakarta.persistence.Table;
 public class ProductoObservacion {
 
     @Id
-    @Column(name = "codproducto", nullable = false)
+    @Column(name = "codproducto", columnDefinition = "int(11)")
     private Integer codProducto;
 
-    @Column(name = "observacion", length = 60)
+    @Column(name = "observacion", columnDefinition = "varchar(60)")
     private String observacion;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -10,13 +10,13 @@ import jakarta.persistence.Table;
 public class Tienda {
 
     @Id
-    @Column(name = "Codtienda", nullable = false, length = 5)
+    @Column(name = "Codtienda", columnDefinition = "char(5)")
     private String codTienda;
 
-    @Column(name = "Denotienda", nullable = false, length = 20)
+    @Column(name = "Denotienda", columnDefinition = "varchar(20)")
     private String denoTienda;
 
-    @Column(name = "CodigoPostal", length = 5)
+    @Column(name = "CodigoPostal", columnDefinition = "char(5)")
     private String codigoPostal;
 
     // Getters and Setters

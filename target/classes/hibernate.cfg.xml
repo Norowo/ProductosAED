@@ -21,7 +21,7 @@
         <property name="format_sql">true</property>
 
         <!-- Actualizar automáticamente el esquema de la base de datos -->
-        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
 
         <!-- Para ver lo que está creando Hibernate -->
         <property name="use_sql_comments">true</property>

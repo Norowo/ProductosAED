@@ -10,58 +10,65 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 public class App {
-	private static SessionFactory sessionFactory; // Declarar como variable estática a nivel de clase
-
-	static {
-		// Inicializar la SessionFactory en un bloque estático
-		Configuration cfg = new Configuration();
-		cfg.configure(); // Busca y usa el archivo hibernate.cfg.xml
-		sessionFactory = cfg.buildSessionFactory();
-	}
 
 	public static void main(String[] args) {
+		
+		//AÑADE AL PROYECTO UNA OPCIÓN CON LAS INSERCIONES DE REGISTROS DE TODAS LAS TABLAS
+		//REALIZAR ELIMINACIONES Y ACTUALIZACIONES DE PRODUCTOS
+		//DEBERA PERMITIR PRODUCTOS CON OBSERVACIONES Y SIN ELLA
+		
+		//VISUALIZAR TODOS LOS PRODUCTOS CON TODOS SUS DATOS INCLUYENDO LA OBERSVACIÓN DE LA QUE TENGA
+		//VISUALIZAR TODOS LOS PRODUCTOS Y SU STOCK, INCLUYENDO LOS DATOS DE LAS TIENDAS Y LAS FAMILIAS DE LOS PRODUCTOS.
+	
 
 		// Abre la sesión y realiza operaciones
-		Session session = sessionFactory.openSession();
+		Session sesion = HibernateUtil.getSessionFactory().openSession(); // crea
+
+		// Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 
 		try {
-			transaction = session.beginTransaction();
+			transaction = sesion.beginTransaction();
 			// Aquí irían las operaciones CRUD, por ejemplo:
 
 			// Prueba de inserción de una familia
-			//Familia familia = new Familia();
-			//familia.setDenoFamilia("Frutas");
-			//familia.setCodFamilia(1);
+			Familia familia = new Familia();
+			familia.setDenoFamilia("Frutas");
+			familia.setCodFamilia(1);
 			// No estableces el ID de la familia porque se genera automáticamente
-			//insertarFamilia(familia);
+			insertarFamilia(familia);
 
 			// Ahora que la familia está insertada, puedes obtener su ID generado
-			// Integer idFamilia = familia.getCodFamilia();
+			//Integer idFamilia = familia.getCodFamilia();
 
 			// Prueba de inserción de un producto
 			Producto producto = new Producto();
 			producto.setDenoProducto("manzanaaaa");
-			producto.setPrecioBase(new BigDecimal("10.00"));
-			producto.setCodFamilia(1); // Suponiendo que ya existe una familia con ID 1
+			producto.setPrecioBase(new BigDecimal("120.00"));
 			producto.setCongelado(false);
+			
+			// Asociar el producto con la familia
+			// Ya no usas 'setCodFamilia' porque la familia es un objeto ahora
+			producto.setFamilia(familia);
 
+			// Guardar el producto en la base de datos
 			insertarProducto(producto);
+
 
 			// Prueba de eliminar un producto
 			// eliminarProducto(2); // Supone que existe un producto con ID 2
 
-			//Producto productoRecuperado = obtenerProductoPorId(1);
-			//System.out.println("Nombre: " + productoRecuperado.getDenoProducto());
+			// Producto productoRecuperado = obtenerProductoPorId(1);
+			// System.out.println("Nombre: " + productoRecuperado.getDenoProducto());
 
 			// Prueba de actualizar un producto
-			//productoRecuperado.setDenoProducto("Producto2");
+			// productoRecuperado.setDenoProducto("Producto2");
 
-			//actualizarProducto(productoRecuperado);
-			
-			//System.out.println("Nombre: " + productoRecuperado.getDenoProducto());
-			
-			//eliminarProducto(1);
+			// actualizarProducto(productoRecuperado);
+
+			// System.out.println("Nombre: " + productoRecuperado.getDenoProducto());
+
+			// eliminarProducto(1);
 
 			// Recuperar y mostrar el producto con ID 1
 			Producto productoRecuperado = obtenerProductoPorId(1);
@@ -83,94 +90,107 @@ public class App {
 				transaction.rollback();
 			e.printStackTrace();
 		} finally {
-			session.close();
+			if (sesion != null) {
+				sesion.close();
+			}
 		}
 
-		sessionFactory.close();
-		// System.out.println("Hello World!");
-
+		// HibernateUtil.getSessionFactory().close();
+		sesion.close();
 	}
 
 	public static void insertarFamilia(Familia familia) {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			session.persist(familia);
-			transaction.commit();
-		} catch (RuntimeException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		// Abrir una nueva sesión
+		try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
+			// Iniciar una transacción
+			Transaction transaction = null;
+			try {
+				transaction = sesion.beginTransaction();
+				// Realizar la operación de persistencia
+				sesion.persist(familia);
+				// Confirmar la transacción
+				transaction.commit();
+			} catch (RuntimeException e) {
+				// En caso de error, hacer rollback de la transacción
+				if (transaction != null) {
+					transaction.rollback();
+				}
+				// Relanzar la excepción o manejarla según sea necesario
+				throw e;
+			}
+		} // La sesión se cierra automáticamente al finalizar el bloque try-with-resources
 	}
 
 	public static void insertarProducto(Producto producto) {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			session.save(producto);
-			transaction.commit();
-			System.out.println("Producto introducido con ID " + producto.getCodProducto());
-		} catch (RuntimeException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction transaction = null;
+			try {
+				transaction = session.beginTransaction();
+				session.save(producto);
+				transaction.commit();
+				System.out.println("Producto introducido con ID " + producto.getCodProducto());
+			} catch (RuntimeException e) {
+				if (transaction != null)
+					transaction.rollback();
+				e.printStackTrace();
+			} finally {
+				session.close();
+			}
 		}
 	}
 
 	public static void eliminarProducto(Integer idProducto) {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			Producto producto = session.get(Producto.class, idProducto);
-			if (producto != null) {
-				session.delete(producto);
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction transaction = null;
+			try {
+				transaction = session.beginTransaction();
+				Producto producto = session.get(Producto.class, idProducto);
+				if (producto != null) {
+					session.delete(producto);
+				}
+				transaction.commit();
+			} catch (RuntimeException e) {
+				if (transaction != null)
+					transaction.rollback();
+				e.printStackTrace();
+			} finally {
+				session.close();
 			}
-			transaction.commit();
-		} catch (RuntimeException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
 		}
 	}
 
 	public static void actualizarProducto(Producto producto) {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-		
-			session.update(producto);
-			transaction.commit();
-		} catch (RuntimeException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction transaction = null;
+			try {
+				transaction = session.beginTransaction();
+
+				session.update(producto);
+				transaction.commit();
+			} catch (RuntimeException e) {
+				if (transaction != null)
+					transaction.rollback();
+				e.printStackTrace();
+			} finally {
+				session.close();
+			}
 		}
 	}
 
 	public static Producto obtenerProductoPorId(int idProducto) {
-		Session session = sessionFactory.openSession();
-		Producto producto = null;
-		try {
-			producto = session.get(Producto.class, idProducto);
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		} finally {
-			session.close();
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Producto producto = null;
+			try {
+				producto = session.get(Producto.class, idProducto);
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+			} finally {
+				session.close();
+			}
+			return producto;
 		}
-		return producto;
 	}
 
 }
