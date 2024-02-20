@@ -11,10 +11,10 @@ import jakarta.persistence.Table;
 public class Familia {
 
     @Id
-    @Column(name = "Codfamilia", nullable = true)
+    @Column(name = "Codfamilia", columnDefinition = "int(11)")
     private int codFamilia;
 
-    @Column(name = "Denofamilia", nullable = false, length = 50)
+    @Column(name = "Denofamilia", columnDefinition = "varchar(50)")
     private String denoFamilia;
 
     // Getters y setters

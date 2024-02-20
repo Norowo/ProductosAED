@@ -12,21 +12,21 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@IdClass(Stock.StockId.class) // Indica que usamos una clase de ID compuesta
+@IdClass(Stock.StockId.class) // clase de ID compuesta
 @Table(name = "productos_stock")
 public class Stock implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "Codtienda")
+    @JoinColumn(name = "Codtienda", columnDefinition = "char(5)")
     private Tienda tienda;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "Codproducto")
+    @JoinColumn(name = "Codproducto", columnDefinition = "int(11)")
     private Producto producto;
 
-    @Column(name = "Unidades", nullable = false)
+    @Column(name = "Unidades", columnDefinition = "int(11)")
     private int unidades;
 
     // Constructor
@@ -58,12 +58,11 @@ public class Stock implements Serializable {
         this.unidades = unidades;
     }
 
-    // La clase de clave compuesta debe implementar Serializable
     public static class StockId implements Serializable {
-        private String tienda; // El tipo de datos debería coincidir con la clave primaria de Tienda
-        private Integer producto; // El tipo de datos debería coincidir con la clave primaria de Producto
+        private String tienda; 
+        private Integer producto; 
     
-        // Constructor vacío necesario para JPA
+    
         public StockId() {
         }
     
@@ -84,7 +83,7 @@ public class Stock implements Serializable {
             this.producto = producto;
         }
     
-        // Implementa equals y hashCode
+        
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;

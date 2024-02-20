@@ -12,6 +12,14 @@ import org.hibernate.cfg.Configuration;
 public class App {
 
 	public static void main(String[] args) {
+		
+		//AÑADE AL PROYECTO UNA OPCIÓN CON LAS INSERCIONES DE REGISTROS DE TODAS LAS TABLAS
+		//REALIZAR ELIMINACIONES Y ACTUALIZACIONES DE PRODUCTOS
+		//DEBERA PERMITIR PRODUCTOS CON OBSERVACIONES Y SIN ELLA
+		
+		//VISUALIZAR TODOS LOS PRODUCTOS CON TODOS SUS DATOS INCLUYENDO LA OBERSVACIÓN DE LA QUE TENGA
+		//VISUALIZAR TODOS LOS PRODUCTOS Y SU STOCK, INCLUYENDO LOS DATOS DE LAS TIENDAS Y LAS FAMILIAS DE LOS PRODUCTOS.
+	
 
 		// Abre la sesión y realiza operaciones
 		Session sesion = HibernateUtil.getSessionFactory().openSession(); // crea
@@ -38,6 +46,7 @@ public class App {
 			producto.setDenoProducto("manzanaaaa");
 			producto.setPrecioBase(new BigDecimal("120.00"));
 			producto.setCongelado(false);
+			
 			// Asociar el producto con la familia
 			// Ya no usas 'setCodFamilia' porque la familia es un objeto ahora
 			producto.setFamilia(familia);
