@@ -3,6 +3,9 @@ package aed;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -10,29 +13,31 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "productos_producto_observacion")
-public class ProductoObservacion {
+public class Observacion {
 
-    @Id
-    @Column(name = "codproducto", columnDefinition = "int(11)")
-    private Integer codProducto;
+	@Id
+    @Column(name = "id", columnDefinition = "int(11)")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "observacion", columnDefinition = "varchar(60)")
     private String observacion;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "codproducto", referencedColumnName = "Codproducto", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producto_id")
     private Producto producto;
+    
+   
 
-    // Getters y setters
-    public Integer getCodProducto() {
-        return codProducto;
-    }
+    public Integer getId() {
+		return id;
+	}
 
-    public void setCodProducto(Integer codProducto) {
-        this.codProducto = codProducto;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getObservacion() {
+	public String getObservacion() {
         return observacion;
     }
 

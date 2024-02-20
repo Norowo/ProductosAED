@@ -1,6 +1,7 @@
 package aed;
 import java.math.BigDecimal;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,8 +36,8 @@ public class Producto {
     @Column(name = "Congelado", columnDefinition = "tinyint(1)")
     private Boolean congelado;
 
-    @OneToOne(mappedBy = "producto")
-    private ProductoObservacion productoObservacion;
+    @OneToOne(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Observacion observacion;
     
 
 
@@ -90,13 +91,15 @@ public class Producto {
         this.congelado = congelado;
     }
 
-    public ProductoObservacion getProductoObservacion() {
-        return productoObservacion;
-    }
+	public Observacion getObservacion() {
+		return observacion;
+	}
 
-    public void setProductoObservacion(ProductoObservacion productoObservacion) {
-        this.productoObservacion = productoObservacion;
-    }
+	public void setObservacion(Observacion observacion) {
+		this.observacion = observacion;
+	}
+
+   
 
  
 }

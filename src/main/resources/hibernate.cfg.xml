@@ -28,7 +28,7 @@
 
         <!-- Configuración de las entidades -->
         <mapping class="aed.Producto"/>
-        <mapping class="aed.ProductoObservacion"/>
+        <mapping class="aed.Observacion"/>
         <mapping class="aed.Tienda"/>
         <mapping class="aed.Stock"/>
         <mapping class="aed.Familia"/>
