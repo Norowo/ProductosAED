@@ -19,7 +19,6 @@ public class Tienda {
     @Column(name = "CodigoPostal", columnDefinition = "char(5)")
     private String codigoPostal;
 
-    // Getters and Setters
     public String getCodTienda() {
         return codTienda;
     }

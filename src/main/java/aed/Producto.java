@@ -41,11 +41,11 @@ public class Producto {
     
 
 
-    @ManyToOne(fetch = FetchType.LAZY) //para mejorar el rendimiento: lo que significa que la familia de un producto se cargará solo cuando se acceda a ella, en lugar de cuando se cargue el producto. 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Codfamilia", nullable = false)
     private Familia familia;
 
-    // Getters y setters para familia
+
     public Familia getFamilia() {
         return familia;
     }

@@ -29,11 +29,9 @@ public class Stock implements Serializable {
     @Column(name = "Unidades", columnDefinition = "int(11)")
     private int unidades;
 
-    // Constructor
     public Stock() {
     }
 
-    // Getters and Setters
     public Tienda getTienda() {
         return tienda;
     }

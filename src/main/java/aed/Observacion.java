@@ -1,6 +1,5 @@
 package aed;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,5 +52,4 @@ public class Observacion {
         this.producto = producto;
     }
 
-    // toString, equals, y hashCode pueden ser añadidos según sea necesario
 }
